@@ -2,7 +2,7 @@
 
 This is a basic Django based todo-list web app.
 
-## Setup environment
+## Setup Environment
 
 Create Python virtual environment:
 
@@ -22,7 +22,7 @@ Install Django:
 pip3 install django
 ```
 
-## Create Django project
+## Create Django Project
 
 Create a Django project:
 
@@ -72,7 +72,7 @@ Now that the server’s running, visit http://127.0.0.1:8000/ with a Web browser
 
 > By default, the runserver command starts the development server on the internal IP at port 8000.
 
-## Create Django app
+## Create Django App
 
 Now that our environment – a “project” – is set up, let's create our todolist app.
 
@@ -113,7 +113,7 @@ Now our directory looks like this:
 
 To include the app in our project, we need to add a reference to its configuration class in the INSTALLED_APPS setting:
 
-```py
+```python
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
@@ -124,3 +124,75 @@ INSTALLED_APPS = (
     'todolist'
 )
 ```
+
+### URL, View and a Minimal Working Website
+
+As mentioned above, urls.py is like a "table of contents". It is a URLconf. Let's create a "table of contents" urls.py for todolist app. For now, let's copy the comment section from mysite/urls.py because the comment helps explain what we are doing here. Please read the comment yourself.
+
+```python
+# ./todolist/urls.py
+"""mysite URL Configuration
+ The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/2.1/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+Including another URLconf
+    1. Import the include() function: from django.urls import include, path
+    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+"""
+```
+
+Let's reference this app URLconf in our project URLconf based on the instructions in the comment:
+
+```python
+# ./mysite/urls.py
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('todolist.urls')) # add this line (and any import if needed by include)
+]
+```
+
+Before we complete todolist/urls.py, let's create a view inside todolist/views.py. 
+
+What is a view?
+
+> A view function, or view for short, is simply a Python function that takes a Web request and returns a Web response.
+
+Good! It sounds like exactly what we need:
+
+```python
+# ./todolist/views.py
+from django.http import HttpResponse
+import datetime
+
+def index(request):
+    message = "Current Time: {}".format(datetime.datetime.now())
+    return HttpResponse(message) 
+```
+
+Now it's time to complete todolist/urls.py:
+
+```python
+# ./todolist/urls.py
+from django.conf.urls import url
+from django.urls import path
+
+from todolist import views
+
+urlpatterns = [
+    path('', views.index, name='index')
+]
+```
+
+Let’s verify our code works:
+
+```bash
+python manage.py runserver
+```
+
+Now that the server’s running, visit http://127.0.0.1:8000/ with a Web browser. We can see the current time on the page!
