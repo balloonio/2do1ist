@@ -19,5 +19,7 @@ from django.urls import path
 from todolist import views
 
 urlpatterns = [
-    path('', views.index, name='index')
+    path('', views.todo_list),
+    path('complete/<int:todo_id>/', views.complete),
+    path('delete/<int:todo_id>/', views.delete)
 ]
