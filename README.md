@@ -15,6 +15,7 @@ Table of Content
 - [Add Todo and Modal](#add-todo-and-modal)
 - [Complete and Delete Todo](#complete-and-delete-todo)
 - [About Deployment](#about-deployment)
+- [Known Issue](#known-issue)
 
 ## Setup Environment
 
@@ -310,6 +311,8 @@ TEMPLATES = [
 
 ## Database and Model
 
+
+
 ## HTTP Form, GET and POST
 
 ## Add Todo and Modal
@@ -317,3 +320,7 @@ TEMPLATES = [
 ## Complete and Delete Todo
 
 ## About Deployment
+
+## Known Issue 
+
+When you refresh the page right after a new todo item is added, a duplicate todo item will be added. This is caused by duplicate form resubmission. To solve this issue, use Post/Redirect/Get. Read more [here](https://en.wikipedia.org/wiki/Post/Redirect/Get) and [here](https://realpython.com/django-redirects/#django-redirects-a-super-simple-example).
