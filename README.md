@@ -311,7 +311,7 @@ TEMPLATES = [
 
 ## Database and Model
 
-
+> A model is the single, definitive source of information about your data. It contains the essential fields and behaviors of the data you’re storing. Generally, each model maps to a single database table.
 
 ## HTTP Form, GET and POST
 
@@ -320,6 +320,22 @@ TEMPLATES = [
 ## Complete and Delete Todo
 
 ## About Deployment
+
+Add the deployment domain to ALLOWED_HOSTS setting:
+
+```python
+ALLOWED_HOSTS = [
+    'www.djangoproject.dev',
+    'docs.djangoproject.dev',
+    ...
+]
+```
+
+Serve the static/asset directory according to the host service provider's instructions. Usually, this might include running this command:
+
+```
+python3 manage.py collectstatic
+```
 
 ## Known Issue 
 
