@@ -1,24 +1,39 @@
 # Todolist in Django
 
-This is a basic Django based todo-list web app.
+This is a basic todolist web app. Demo [here](https://bolunzhang.pythonanywhere.com/). (This hosting service will hibernate after long time of inactivity. Therefore, please submit an issue if you don't see it working.)
+
+Table of Content
+
+- [Setup Environment](#setup-environment)
+- [Create Django Project](#create-django-project)
+- [Create Django App](#create-django-app)
+- [URL, View and a Minimal Working Website](#url-view-and-a-minimal-working-website)
+- [Bootstrap](#bootstrap)
+- [HTML and Template](#html-and-template)
+- [Database and Model](#database-and-model)
+- [HTTP Form, GET and POST](#http-form-get-and-post)
+- [Add Todo and Modal](#add-todo-and-modal)
+- [Complete and Delete Todo](#complete-and-delete-todo)
+- [About Deployment](#about-deployment)
+- [Known Issue](#known-issue)
 
 ## Setup Environment
 
 Create Python virtual environment:
 
-```bash
+```
 python3 -m venv myvenv
 ```
 
 Activate it:
 
-```bash
+```
 source /myvenv/bin/activate
 ```
 
 Install Django:
 
-```bash
+```
 pip3 install django
 ```
 
@@ -26,20 +41,20 @@ pip3 install django
 
 Create a Django project:
 
-```bash
+```
 django-admin startproject mysite .
 ```
 
 Now let’s look at what startproject created:
 
-```bash
-./
-    manage.py
-    mysite/
-        __init__.py
-        settings.py
-        urls.py
-        wsgi.py
+```
+.
+├── manage.py
+└── mysite
+    ├── __init__.py
+    ├── settings.py
+    ├── urls.py
+    └── wsgi.py
 ```
 
 > - manage.py: A command-line utility that lets you interact with this Django project in various ways.
@@ -51,7 +66,7 @@ Now let’s look at what startproject created:
 
 Let’s verify our Django project works:
 
-```bash
+```
 $ python manage.py runserver
 Performing system checks...
 
@@ -92,7 +107,6 @@ Now our directory looks like this:
 
 ```
 .
-├── db.sqlite3
 ├── manage.py
 ├── mysite
 │   ├── __init__.py
@@ -125,7 +139,7 @@ INSTALLED_APPS = (
 )
 ```
 
-### URL, View and a Minimal Working Website
+## URL, View and a Minimal Working Website
 
 As mentioned above, urls.py is like a "table of contents". It is a URLconf. Let's create a "table of contents" urls.py for todolist app. For now, let's copy the comment section from mysite/urls.py because the comment helps explain what we are doing here. Please read the comment yourself.
 
@@ -191,8 +205,152 @@ urlpatterns = [
 
 Let’s verify our code works:
 
-```bash
+```
 python manage.py runserver
 ```
 
 Now that the server’s running, visit http://127.0.0.1:8000/ with a Web browser. We can see the current time on the page!
+
+## Bootstrap
+
+You can either use Bootstrap CDN or downloard source files to apply Bootstrap. Here we downloard the source files into static directory:
+
+```
+.
+├── manage.py
+├── static
+│   ├── css
+│   │   └── bootstrap.css
+│   ├── fonts
+│   └── js
+│       ├── bootstrap.js
+│       └── jquery-3.3.1.js
+├── mysite
+│   └── ...
+└── todolist
+    └── ...
+```
+
+To apply Bootstrap, include this into the html file
+
+```html
+  <link rel="stylesheet" href="/static/css/bootstrap.css" />
+  <script src="/static/js/jquery-3.3.1.js"></script>
+  <script src="/static/js/bootstrap.js"></script>
+```
+
+> ⚠️ The order of include matters here! ⚠️  
+
+## HTML and Template
+
+Create an empty template directory. Inside it, create a basic html file with Bootstrap style:
+
+```html
+<!-- ./template/base.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TodoList</title>
+  <link rel="stylesheet" href="/static/css/bootstrap.css" />
+  <script src="/static/js/jquery-3.3.1.js"></script>
+  <script src="/static/js/bootstrap.js"></script>
+</head>
+<body>
+  <div class="container">
+    {% block content %}
+    {% endblock %}
+  </div>
+</body>
+</html>
+```
+
+> Being a web framework, Django needs a convenient way to generate HTML dynamically. The most common approach relies on templates. A template contains the static parts of the desired HTML output as well as some special syntax describing how dynamic content will be inserted.
+
+As above show, we are using **block and extends** template syntax to quickly apply Bootstrap style to our index.html.
+
+```html
+<!-- ./template/index.html -->
+{% extends 'base.html' %}
+{% block content %}
+  <div>
+    <h1>TodoList</h1>
+  </div>
+{% endblock %}
+```
+
+For loop and if statement on a dynamic variable returned by backend:
+
+```html
+{% for todo in todos %}
+    <tr>
+        <td>
+        {% if todo.completed %}
+            <del>{{ todo.title }}</del>
+        {% else %}
+            {{ todo.title }}
+        {% endif %}
+        </td>
+    </tr>
+{% endfor %}
+```
+
+> ⚠️ All those will not work unless the templates engines are configured with the TEMPLATES setting. ⚠️  
+
+```python
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            # ... some options here ...
+        },
+    },
+]
+```
+
+## Database and Model
+
+> A model is the single, definitive source of information about your data. It contains the essential fields and behaviors of the data you’re storing. Generally, each model maps to a single database table.
+
+Define the model, which is the database object. This step is similar to schema definition in some traditional database workflows.
+
+```python
+class Todo(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    completed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ('completed', '-updated_at',)
+```
+
+## HTTP Form, GET and POST
+
+## Add Todo and Modal
+
+## Complete and Delete Todo
+
+## About Deployment
+
+Add the deployment domain to ALLOWED_HOSTS setting:
+
+```python
+ALLOWED_HOSTS = [
+    'www.djangoproject.dev',
+    'docs.djangoproject.dev',
+    ...
+]
+```
+
+Serve the static/asset directory according to the host service provider's instructions. Usually, this might include running this command:
+
+```
+python3 manage.py collectstatic
+```
+
+## Known Issue
+
+When you refresh the page right after a new todo item is added, a duplicate todo item will be added. This is caused by duplicate form resubmission. To solve this issue, use Post/Redirect/Get. Read more [here](https://en.wikipedia.org/wiki/Post/Redirect/Get) and [here](https://realpython.com/django-redirects/#django-redirects-a-super-simple-example).
