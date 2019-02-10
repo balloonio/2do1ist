@@ -19,7 +19,7 @@ from django.urls import path
 from todolist import views
 
 urlpatterns = [
-    path('', views.todo_list),
+    path('', views.todo_list, name='todo_home'),
     path('add/', views.add),
     path('complete/<int:todo_id>/', views.complete),
     path('delete/<int:todo_id>/', views.delete)
