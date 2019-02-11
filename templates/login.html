@@ -5,7 +5,7 @@
 {% block content %}
 <div class="container">
     <div class="row justify-content-center align-items-center" style="height:100vh">
-        <div class="col-auto">
+        <div class="col-sm-12 col-md-8 col-lg-6">
             <div class="card">
                 <div class="card-body">
                     <p class="card-title">Login to use Todolist</p>
@@ -17,10 +17,21 @@
                         <div class="form-group">
                             <input type="password" class="form-control" name={{ form.password.html_name }} placeholder="password">
                         </div>
+                        <div class="row">
+                        <div class="col">
+                        {% if form.errors %}
+                            {% for key, value in form.errors.items %} 
+                                <div class="alert alert-danger" role="alert">
+                                {{ key }} - {{ value | striptags }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}  
+                        </div>
+                        </div>
                         <button type="submit" id="sendlogin" class="btn btn-primary my-1">Login</button>
                     </form>
                     <form action="{% url 'signup' %}">
-                        <button type="submit" class="btn btn-outline-primary my-1">Signup</button>
+                        <button type="submit" class="btn btn-outline-primary my-1">Sign Up</button>
                     </form>
                 </div>
             </div>

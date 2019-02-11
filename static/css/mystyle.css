@@ -6,7 +6,6 @@ form { display: inline; }
     align-items: center;
 }
 
-form > button {
+.card button {
     width: 100%;
-  }
-  
+}
