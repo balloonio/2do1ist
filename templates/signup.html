@@ -3,11 +3,30 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Sign Up</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Sign Up</button>
-</form>
-<a href="{% url 'login' %}">Login</a>
+
+<div class="container">
+    <div class="row justify-content-center align-items-center" style="height:100vh">
+        <div class="col-auto">
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-title">Sign up to use todolist</p>
+                    <form method="post" autocomplete="off">
+                      {% csrf_token %}
+                        <div class="form-group">
+                            <input type="text" class="form-control" name={{ form.username.html_name }} placeholder="username">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" name={{ form.password1.html_name }} placeholder="password">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" name={{ form.password2.html_name }} placeholder="confirm password">
+                        </div>
+                        <button type="submit" id="sendSignup" class="btn btn-outline-primary">Signup</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

@@ -11,7 +11,6 @@ def index(request):
     return HttpResponse(message)
 
 def todo_list(request):
-    print(request.user)
     todos = Todo.objects.filter(user_id=request.user.id)
     return render(request, 'index.html', locals())
 
