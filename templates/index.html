@@ -6,10 +6,10 @@
   <div>
     <div class="container">
       <div class="row">
-        <div class="col"><h1>TodoList</h1></div>
+        <div class="col"><h1>Todolist</h1></div>
         <div class="col-auto">                    
           <form action="{% url 'logout' %}">
-            <button type="submit" class="btn btn-outline-primary">Logout</button>
+            <button type="submit" class="btn btn-info">Logout</button>
           </form>
         </div> 
       </div>
@@ -52,7 +52,7 @@
       </tbody>
     </table>
     <!-- Button for Add todo -->
-    <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal-add">Add</button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add">Add</button>
     <!-- Modal -->
     <div class="modal fade" id="modal-add" tabindex="-1" role="dialog" aria-labelledby="addTodoModalLabel" aria-hidden="true">
         <!-- HTML form for modal-add -->
@@ -75,7 +75,6 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Add</button>
                     </div>
                 </div>
@@ -84,6 +83,7 @@
     </div>
   </div>
 {% else %}
+  <!-- THIS SHOULD NEVER BE REACHED BECAUSE OF SERVER SIDE REDIRECT! -->
   <p>You are not logged in</p>
   <a href="{% url 'login' %}">login</a>
 {% endif %}

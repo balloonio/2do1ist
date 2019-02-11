@@ -11,6 +11,8 @@ def index(request):
     return HttpResponse(message)
 
 def todo_list(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('accounts/login/')
     todos = Todo.objects.filter(user_id=request.user.id)
     return render(request, 'index.html', locals())
 

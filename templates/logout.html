@@ -3,6 +3,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<p>Thanks for using Todolist. You are logged out.</p>
-<a href="{% url 'login' %}">Login here</a>
+
+<div class="alert alert-success" role="alert">
+  <h4 class="alert-heading">Well done!</h4>
+  <p>Aww yeah, you have successfully logged out from Todolist.</p>
+  <hr>
+  <p class="mb-0">Login <a href="{% url 'login' %}">here</a> if you miss it already!</p>
+</div>
 {% endblock %}

@@ -8,7 +8,7 @@
         <div class="col-auto">
             <div class="card">
                 <div class="card-body">
-                    <p class="card-title">Login to use todolist</p>
+                    <p class="card-title">Login to use Todolist</p>
                     <form method="post" autocomplete="off">
                       {% csrf_token %}
                         <div class="form-group">
@@ -17,10 +17,10 @@
                         <div class="form-group">
                             <input type="password" class="form-control" name={{ form.password.html_name }} placeholder="password">
                         </div>
-                        <button type="submit" id="sendlogin" class="btn btn-outline-primary">login</button>
+                        <button type="submit" id="sendlogin" class="btn btn-primary my-1">Login</button>
                     </form>
                     <form action="{% url 'signup' %}">
-                        <button type="submit" class="btn btn-outline-primary">Signup</button>
+                        <button type="submit" class="btn btn-outline-primary my-1">Signup</button>
                     </form>
                 </div>
             </div>

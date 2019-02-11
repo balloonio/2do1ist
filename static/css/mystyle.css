@@ -5,3 +5,8 @@ form { display: inline; }
     justify-content: center;
     align-items: center;
 }
+
+form > button {
+    width: 100%;
+  }
+  
