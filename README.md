@@ -1,6 +1,6 @@
-# Todolist in Django
+# 2do1ist in Django
 
-This is a basic todolist web app. Demo [here](https://bolunzhang.pythonanywhere.com/). (This hosting service will hibernate after long time of inactivity. Therefore, please submit an issue if you don't see it working.)
+This is a basic todolist web app. Demo [here](https://2do.pythonanywhere.com/). (This hosting service will hibernate after long time of inactivity. Therefore, please submit an issue if you don't see it working.)
 
 Table of Content
 
