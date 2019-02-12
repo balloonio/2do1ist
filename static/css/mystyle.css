@@ -1,11 +1,5 @@
 form { display: inline; }
 
-.col-auto {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .card button {
     width: 100%;
 }

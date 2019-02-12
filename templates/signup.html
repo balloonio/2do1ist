@@ -2,6 +2,11 @@
 
 {% extends 'base.html' %}
 
+{% block headcontent %}
+  <script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
+  <script src="/static/js/mymain.js"></script>
+{% endblock %}
+
 {% block content %}
 
 <div class="container">
@@ -9,7 +14,7 @@
         <div class="col-sm-12 col-md-8 col-lg-6">
             <div class="card">
                 <div class="card-body">
-                    <p class="card-title">Sign up to use Todolist</p>
+                    <p class="card-title">Sign up to use 2do1ist</p>
                     <form method="post" autocomplete="off">
                       {% csrf_token %}
                         <div class="form-group">

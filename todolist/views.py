@@ -14,6 +14,8 @@ def todo_list(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect('accounts/login/')
     todos = Todo.objects.filter(user_id=request.user.id)
+    completed = sum( t.completed for t in todos )
+    progress = (completed / len(todos)) * 100 if todos else 0
     return render(request, 'index.html', locals())
 
 def add(request):
