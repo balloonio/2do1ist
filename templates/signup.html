@@ -1,0 +1,50 @@
+<!-- templates/signup.html -->
+
+{% extends 'base.html' %}
+
+{% block headcontent %}
+  <script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
+  <script src="/static/js/mymain.js"></script>
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center align-items-center" style="height:100vh">
+        <div class="col-sm-12 col-md-8 col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-title">Sign up to use 2do1ist</p>
+                    <form method="post" autocomplete="off">
+                      {% csrf_token %}
+                        <div class="form-group">
+                            <input type="text" class="form-control" name={{ form.username.html_name }} placeholder="username" data-toggle="popover" data-placement="right" data-html="true" data-content="{{ form.username.help_text }}">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" name={{ form.password1.html_name }} placeholder="password" data-toggle="popover" data-placement="right" data-html="true" data-content="{{ form.password1.help_text }}">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" name={{ form.password2.html_name }} placeholder="confirm password">
+                        </div>
+
+                        <div class="row">
+                        <div class="col">
+                        {% if form.errors %}
+                            {% for key, value in form.errors.items %} 
+                                <div class="alert alert-danger" role="alert">
+                                {{ key }} - {{ value | striptags }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}  
+                        </div>
+                        </div>
+
+                        <button type="submit" id="sendSignup" class="btn btn-primary">Sign Up</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

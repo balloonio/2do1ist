@@ -1,46 +1,77 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% if user.is_authenticated %}
+
   <div>
-    <h1>TodoList</h1>
-    <table class="table">
-      <thead>
-      <tr>
-        <th>Title</th>
-        <th>Completed</th>
-        <th>Delete</th>
-      </tr>
-      </thead>
-      <tbody>
+    <div class="container">
+      <div class="row">
+        <div class="col"><h1>2do1ist</h1></div>
+        <div class="col-auto">                    
+          <form action="{% url 'logout' %}">
+            <button type="submit" class="btn btn-secondary my-2">Logout</button>
+          </form>
+        </div> 
+      </div>
+    </div>
+
+    {% if progress <= 33 %}
+      <div class="progress">
+        <div class="progress-bar bg-danger" role="progressbar" style="width: {{progress}}%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>      
+    {% elif progress <= 66 %}
+      <div class="progress">
+        <div class="progress-bar bg-warning" role="progressbar" style="width: {{progress}}%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+    {% else %}
+      <div class="progress">
+        <div class="progress-bar bg-success" role="progressbar" style="width: {{progress}}%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>      
+    {% endif %}
+
+    <div class="list-group">
+      <li class="list-group-item">
+        <div class="container">
+          <div class="row">
+            <div class="col-4"><h6>Title</h6></div>
+            <div class="col-4"><h6>Complete</h6></div>
+            <div class="col-4"><h6>Delete</h6></div>
+          </div>
+        </div>
+      </li>
       {% for todo in todos %}
-        <tr>
-          <td>
-            {% if todo.completed %}
-              <del>{{ todo.title }}</del>
-            {% else %}
-              {{ todo.title }}
-            {% endif %}
-          </td>
-          <td>
-            {% if todo.completed %}
-              <div></div>
-            {% else %}
-              <form action="/complete/{{ todo.id }}/">
-                <button type="submit" class="btn btn-outline-success">Complete</button>
-              </form>
-            {% endif %}
-            </td>
-          <td>
-            <form action="/delete/{{ todo.id }}/">
-              <button type="submit" class="btn btn-outline-danger">Delete</button>
-            </form>
-          </td>
-        </tr>
+        <li class="list-group-item">
+          <div class="container">
+            <div class="row">
+              <div class="col-4">
+                {% if todo.completed %}
+                  <del>{{ todo.title }}</del>
+                {% else %}
+                  {{ todo.title }}
+                {% endif %}              
+              </div>
+              <div class="col-4">
+                {% if todo.completed %}
+                  <div></div>
+                {% else %}
+                  <form action="/complete/{{ todo.id }}/">
+                    <button type="submit" class="btn btn-outline-success">Complete</button>
+                  </form>
+                {% endif %}              
+              </div>            
+              <div class="col-4">
+                <form action="/delete/{{ todo.id }}/">
+                  <button type="submit" class="btn btn-outline-danger">Delete</button>
+                </form>                
+              </div>
+            </div>
+          </div>
+        </li>      
       {% endfor %}
-      </tbody>
-    </table>
+    </div>
+
     <!-- Button for Add todo -->
-    <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal-add">Add</button>
+    <button type="button" class="btn btn-primary my-2" data-toggle="modal" data-target="#modal-add">Add</button>
     <!-- Modal -->
     <div class="modal fade" id="modal-add" tabindex="-1" role="dialog" aria-labelledby="addTodoModalLabel" aria-hidden="true">
         <!-- HTML form for modal-add -->
@@ -63,7 +94,6 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Add</button>
                     </div>
                 </div>
@@ -71,4 +101,9 @@
         </form>
     </div>
   </div>
+{% else %}
+  <!-- THIS SHOULD NEVER BE REACHED BECAUSE OF SERVER SIDE REDIRECT! -->
+  <p>You are not logged in</p>
+  <a href="{% url 'login' %}">login</a>
+{% endif %}
 {% endblock %}
