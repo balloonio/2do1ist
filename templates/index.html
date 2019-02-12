@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
 
+{% block headcontent %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.2.0/anime.min.js"></script>
+  <script src="/static/js/mymain.js" defer></script>
+{% endblock %}
+
 {% block content %}
 {% if user.is_authenticated %}
 
@@ -7,7 +12,7 @@
     <div class="container">
       <div class="row my-2">
         <div class="col-auto">
-        <img src="/static/media/logo-black.svg" height="52" width="80" alt="2do1ist logo">
+        <img src="/static/media/logo-slim.svg" height="52" width="80" alt="2do1ist logo">
         </div>
         <div class="col"></div>
         <div class="col-auto">                    
@@ -58,13 +63,13 @@
                   <div></div>
                 {% else %}
                   <form action="/complete/{{ todo.id }}/">
-                    <button type="submit" class="btn btn-outline-success">Complete</button>
+                    <button type="submit" class="btn btn-outline-success todo-action">Complete</button>
                   </form>
                 {% endif %}              
               </div>            
               <div class="col-4">
                 <form action="/delete/{{ todo.id }}/">
-                  <button type="submit" class="btn btn-outline-danger">Delete</button>
+                  <button type="submit" class="btn btn-outline-danger todo-action">Delete</button>
                 </form>                
               </div>
             </div>
@@ -74,7 +79,7 @@
     </div>
 
     <!-- Button for Add todo -->
-    <button type="button" class="btn btn-primary my-2" data-toggle="modal" data-target="#modal-add">Add</button>
+    <button type="button" class="btn btn-primary my-2 todo-action" data-toggle="modal" data-target="#modal-add">Add</button>
     <!-- Modal -->
     <div class="modal fade" id="modal-add" tabindex="-1" role="dialog" aria-labelledby="addTodoModalLabel" aria-hidden="true">
         <!-- HTML form for modal-add -->

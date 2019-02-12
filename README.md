@@ -1,6 +1,8 @@
 # 2do1ist
 
-This is a todolist web app using Django framework. Demo [here](https://2do.pythonanywhere.com/). (This hosting service will hibernate after long time of inactivity. Therefore, please submit an issue if you don't see it working.)
+2do1ist is a todolist app using Django framework. Demo [here](https://2do.pythonanywhere.com/). 
+
+> This hosting service will hibernate after long time of inactivity. Therefore, please submit an issue if you come across any problems.
 
 Table of Content
 
