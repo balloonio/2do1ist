@@ -8,7 +8,15 @@
         <div class="col-sm-12 col-md-8 col-lg-6">
             <div class="card">
                 <div class="card-body">
-                    <p class="card-title">Login to use 2dolist</p>
+                    <p class="card-title">
+                        <div class="container">
+                            <div class="row justify-content-center align-items-center">
+                            <div class="col-sm-12 col-md-8 col-lg-6 my-2">
+                            <img src="/static/media/logo-black.svg" alt="2do1ist logo">
+                            </div>
+                            </div>
+                        </div>
+                    </p>
                     <form method="post" autocomplete="off">
                       {% csrf_token %}
                         <div class="form-group">
@@ -22,7 +30,7 @@
                         {% if form.errors %}
                             {% for key, value in form.errors.items %} 
                                 <div class="alert alert-danger" role="alert">
-                                {{ key }} - {{ value | striptags }}
+                                {% if key != '__all__' %}{{ key }} - {% endif %}{{ value | striptags }}
                                 </div>
                             {% endfor %}
                         {% endif %}  
