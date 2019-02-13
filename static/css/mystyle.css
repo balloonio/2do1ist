@@ -3,3 +3,19 @@ form { display: inline; }
 .card button {
     width: 100%;
 }
+
+path {
+    stroke: #343a40;
+    stroke-width: 1.5rem;
+    fill: transparent;  
+    stroke-dasharray: 3000;
+    stroke-dashoffset: 2000;
+    animation: dash 10s infinite linear forwards;
+    animation-direction: alternate;
+  }
+
+@keyframes dash {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
