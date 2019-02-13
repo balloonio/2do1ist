@@ -24,4 +24,19 @@ function updateProgress()
 };
 
 let todoActions = document.querySelectorAll('.todo-action');
-//todoActions.forEach(action => {action.addEventListener('click')})
+
+let paths = document.querySelectorAll('path');
+paths.forEach(el => {
+  let pLen = el.getTotalLength();
+  el.setAttribute('stroke-dasharray', pLen + ' ' + pLen );
+  anime({
+    targets: el,
+    strokeDashoffset: [anime.setDashoffset, 0],
+    easing: 'easeInOutSine',
+    duration: 1500,
+    delay: function(el, i) { return i * 250 },
+    direction: 'alternate',
+    loop: true
+  });
+});
+
