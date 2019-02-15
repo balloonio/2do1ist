@@ -3,3 +3,8 @@ form { display: inline; }
 .card button {
     width: 100%;
 }
+
+#pbar {
+    width: 100%;
+    height: 15px;
+}

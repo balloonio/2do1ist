@@ -12,19 +12,6 @@ function removePop()
 
 document.addEventListener('click', removePop, true);
 
-function updateProgress()
-{
-  anime({
-    targets: '.progress-bar',
-    width: '100%', // -> from '28px' to '100%',
-    easing: 'easeInOutQuad',
-    direction: 'alternate',
-    loop: true
-  });
-};
-
-let todoActions = document.querySelectorAll('.todo-action');
-
 let paths = document.querySelectorAll('path');
 paths.forEach(el => {
   let pLen = el.getTotalLength();
@@ -40,3 +27,23 @@ paths.forEach(el => {
   });
 });
 
+// progressbar.js@1.0.0 version is used
+// Docs: http://progressbarjs.readthedocs.org/en/1.0.0/
+
+var bar = new ProgressBar.Line(pbar, {
+  strokeWidth: 1,
+  easing: 'easeInOutSine',
+  duration: 1400,
+  color: '#FFEA82',
+  trailColor: '#eee',
+  trailWidth: 1,
+  svgStyle: {width: '100%', height: '100%'}
+});
+
+$(function(){
+  bar.set(data.green_from);
+  bar.animate((data.green_to), 
+  { 
+    duration: 1000,
+  }) 
+});

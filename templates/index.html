@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block headcontent %}
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.2.0/anime.min.js"></script>
+  <script src="https://rawgit.com/kimmobrunfeldt/progressbar.js/1.0.0/dist/progressbar.js"></script>
   <script src="/static/js/mymain.js" defer></script>
 {% endblock %}
 
@@ -22,20 +22,15 @@
         </div> 
       </div>
     </div>
-
-    {% if progress <= 33 %}
-      <div class="progress">
-        <div class="progress-bar bg-danger" role="progressbar" style="width: {{progress}}%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-      </div>      
-    {% elif progress <= 66 %}
-      <div class="progress">
-        <div class="progress-bar bg-warning" role="progressbar" style="width: {{progress}}%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-      </div>
-    {% else %}
-      <div class="progress">
-        <div class="progress-bar bg-success" role="progressbar" style="width: {{progress}}%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-      </div>      
-    {% endif %}
+                  
+    <div id="pbar"></div>
+ 
+    <script>
+      var data = {
+        green_to: {{green_to}},
+        green_from: {{green_from}},
+      }
+    </script>  
 
     <div class="list-group">
       <li class="list-group-item">
