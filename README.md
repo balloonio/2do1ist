@@ -1,8 +1,19 @@
-# 2do1ist
+<p align="center">
+  <img src="./static/media/logo-slim.svg" height="150">
+</p>
 
 2do1ist is a todolist app using Django framework. Demo [here](https://2do.pythonanywhere.com/). 
 
-> This hosting service will hibernate after long time of inactivity. Therefore, please submit an issue if you come across any problems.
+This app covers the following topics and practice:
+
+- Django basics (template, url, view and session)
+- How to use Django build-in auth app to implement **login** and **logout**
+- How to implement user **signup**
+- How to solve **form resubmissions**
+- How to use Bootstrap (modal and **popover**)
+- How to use **Bootstrap grid system**
+- How to **animate svg logo** with anime.js
+- How to **animate progress bar** with progressbar.js
 
 Table of Content
 
@@ -14,10 +25,10 @@ Table of Content
 - [HTML and Template](#html-and-template)
 - [Database and Model](#database-and-model)
 - [HTTP Form, GET and POST](#http-form-get-and-post)
-- [Add Todo and Modal](#add-todo-and-modal)
-- [Complete and Delete Todo](#complete-and-delete-todo)
+- [Add/Complete/Delete a Todo](#addcompletedelete-a-todo)
+- [Animate SVG Logo](#animate-svg-logo)
 - [About Deployment](#about-deployment)
-- [Known Issue](#known-issue)
+- [Reference](#reference)
 
 ## Setup Environment
 
@@ -329,22 +340,135 @@ class Todo(models.Model):
         ordering = ('completed', '-updated_at',)
 ```
 
+> Model metadata is “anything that’s not a field”, such as ordering options (`ordering`). For `ordering`, aach string is a field name with an optional "-" prefix, which indicates descending order. Fields without a leading "-" will be ordered ascending.
+
+Keep in mind, everytime you modify a model, you need to regenerate migration scripts and migrate:
+
+```
+$ python3 manage.py makemigrations
+...
+$ python3 manage.py migrate
+```
+
 ## HTTP Form, GET and POST
 
-## Add Todo and Modal
+The `<form>` tag is used to create an HTML form for user input. Any applicable input tags inside the form will be sent over to server side.
 
-## Complete and Delete Todo
+A typical login submission form looks like this:
+
+```html
+<form action="/login" method="post">
+  Name: <input type="text" name="name_field"><br>
+  Password: <input type="password" name="password_field"><br>
+  <button type="submit">Login</button>
+</form>
+```
+
+`method` attribute specifies the HTTP method to send the form data:
+
+- GET is used to request data from a specified resource:
+    - GET requests can be cached
+    - GET requests remain in the browser history
+    - GET requests can be bookmarked
+    - **GET requests should never be used when dealing with sensitive data**
+    - GET requests have length restrictions
+    - GET requests is only used to request data (not modify)
+    - The query string (name/value pairs) is sent in the URL of a GET request:
+        ```
+        /test/demo_form.php?name1=value1&name2=value2
+        ```
+
+- POST is used to send data to a server to create/update a resource
+    - POST requests are never cached
+    - POST requests do not remain in the browser history
+    - POST requests cannot be bookmarked
+    - POST requests have no restrictions on data length
+    - The data sent to the server with POST is stored in the request body of the HTTP request:
+        ```
+        POST /test/demo_form.php HTTP/1.1
+        Host: w3schools.com
+        name1=value1&name2=value2
+        ```
+
+## Add/Complete/Delete a Todo
+
+To avoid form resubmission issue, we use POST/Redirect/GET pattern here. Therefore, each action is being posted to its corresponding url for server processing. Id is also posted for complete and delete actions.
+
+```python
+# ./todolist/urls.py
+urlpatterns = [
+    path('', views.todo_list, name='todo_home'),
+    path('add/', views.add),
+    path('complete/<int:todo_id>/', views.complete),
+    path('delete/<int:todo_id>/', views.delete)
+]
+```
+
+```python
+# ./todolist/views.py
+def add(request):
+    todoname = request.POST.get('todoname')
+    new_todo = Todo.objects.create(title=todoname, user_id=request.user.id)
+    return HttpResponseRedirect('/')
+
+def todo_list(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('accounts/login/')
+    todos = Todo.objects.filter(user_id=request.user.id)
+    return render(request, 'index.html', locals())
+```
+
+> At a early version of this code, Add Todo action was posted to the same url as the index page. As a result, when you refresh the page right after a new todo item was added, a duplicate todo item would be added. This was caused by duplicate form resubmission. To solve this issue, Post/Redirect/Get was used. Instead of posting to the same url, Add Todo action posts to a dedicated url and server invokes a redirect to index page. Read more [here](https://en.wikipedia.org/wiki/Post/Redirect/Get) and [here](https://realpython.com/django-redirects/#django-redirects-a-super-simple-example).
+
+## Animate SVG Logo
+
+To include a SVG logo inside HTML, simply insert the SVG code, which you can get from Adobe Illustrator when save. It typically looks like this:
+
+```html
+<div>
+    <?xml version="1.0" encoding="utf-8"?>
+    <!-- Generator: Adobe Illustrator 17.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+    <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+        viewBox="-174 126.3 3784 2536.5" enable-background="new -174 126.3 3784 2536.5" xml:space="preserve">
+    <g enable-background="new    ">
+        <path fill="#FFFFFF" stroke="#231F20" stroke-width="5px" d="M1650.4,1206.5h-2.5l-150.1,71.4l-30.3-138l208.2-96.9h152.6v786.9h-177.9L1650.4,1206.5L1650.4,1206.5z"/>
+    </g>
+    </svg>
+</div>
+```
+
+Include `anime.js`:
+
+```html
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.2.0/anime.min.js"></script>
+```
+
+Animate:
+
+```javascript
+let paths = document.querySelectorAll('path');
+paths.forEach(el => {
+  let pLen = el.getTotalLength();
+  el.setAttribute('stroke-dasharray', pLen + ' ' + pLen );
+  anime({
+    targets: el,
+    strokeDashoffset: [anime.setDashoffset, 0],
+    easing: 'easeInOutSine',
+    duration: 1500,
+    delay: function(el, i) { return i * 250 },
+    direction: 'alternate',
+    loop: true
+  });
+});
+```
 
 ## About Deployment
 
 Add the deployment domain to ALLOWED_HOSTS setting:
 
 ```python
-ALLOWED_HOSTS = [
-    'www.djangoproject.dev',
-    'docs.djangoproject.dev',
-    ...
-]
+ALLOWED_HOSTS = ['2do.pythonanywhere.com']
 ```
 
 Serve the static/asset directory according to the host service provider's instructions. Usually, this might include running this command:
@@ -353,6 +477,11 @@ Serve the static/asset directory according to the host service provider's instru
 python3 manage.py collectstatic
 ```
 
-## Known Issue
+## Reference
 
-When you refresh the page right after a new todo item is added, a duplicate todo item will be added. This is caused by duplicate form resubmission. To solve this issue, use Post/Redirect/Get. Read more [here](https://en.wikipedia.org/wiki/Post/Redirect/Get) and [here](https://realpython.com/django-redirects/#django-redirects-a-super-simple-example).
+[Django Login/Logout Tutorial (Part 1)](https://wsvincent.com/django-user-authentication-tutorial-login-and-logout/)  
+[How the Bootstrap 4 Grid Works](https://uxplanet.org/how-the-bootstrap-4-grid-works-a1b04703a3b7)  
+[progressbar.js](https://kimmobrunfeldt.github.io/progressbar.js/)  
+[anime.js](https://animejs.com/)  
+[How SVG Line Animation Works](https://css-tricks.com/svg-line-animation-works/)  
+[Metamorphosis: morphing SVGs](https://hackernoon.com/metamorphosis-morphing-svgs-378cf4f3aa58)  
