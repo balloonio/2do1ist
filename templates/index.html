@@ -2,7 +2,6 @@
 
 {% block headcontent %}
   <script src="https://rawgit.com/kimmobrunfeldt/progressbar.js/1.0.0/dist/progressbar.js"></script>
-  <script src="/static/js/mymain.js" defer></script>
 {% endblock %}
 
 {% block content %}
@@ -31,16 +30,35 @@
       var data = {
         green_to: {{green_to}},
         green_from: {{green_from}},
-      }
+      };
+      // progressbar.js@1.0.0 version is used
+      // Docs: http://progressbarjs.readthedocs.org/en/1.0.0/
+
+      var bar = new ProgressBar.Line(pbar, {
+        strokeWidth: 1,
+        easing: 'easeInOutSine',
+        duration: 1400,
+        color: '#FFEA82',
+        trailColor: '#eee',
+        trailWidth: 1,
+        svgStyle: {width: '100%', height: '100%'}
+      });
+
+      $(function(){
+        bar.set(data.green_from);
+        bar.animate((data.green_to), 
+        { 
+          duration: 1000,
+        }) 
+      });
     </script>  
 
     <div class="list-group">
       <li class="list-group-item">
         <div class="container">
           <div class="row">
-            <div class="col-4"><h6>Title</h6></div>
-            <div class="col-4"><h6>Complete</h6></div>
-            <div class="col-4"><h6>Delete</h6></div>
+            <div class="col"><h6>Title</h6></div>
+            <div class="col-8 col-sm-6 col-md-4 col-lg-2 float-right action-title"><h6>Actions</h6></div>
           </div>
         </div>
       </li>
@@ -48,26 +66,29 @@
         <li class="list-group-item">
           <div class="container">
             <div class="row">
-              <div class="col-4">
+              <div class="col-4 col-sm-6 col-md-8 col-lg-10">
+                <p class="todo-title">
                 {% if todo.completed %}
                   <del>{{ todo.title }}</del>
                 {% else %}
                   {{ todo.title }}
-                {% endif %}              
+                {% endif %}   
+                </p>           
               </div>
-              <div class="col-4">
-                {% if todo.completed %}
-                  <div></div>
-                {% else %}
-                  <form action="/complete/{{ todo.id }}/">
-                    <button type="submit" class="btn btn-outline-success todo-action">Complete</button>
-                  </form>
-                {% endif %}              
-              </div>            
-              <div class="col-4">
-                <form action="/delete/{{ todo.id }}/">
-                  <button type="submit" class="btn btn-outline-danger todo-action">Delete</button>
-                </form>                
+
+              <div class="col-8 col-sm-6 col-md-4 col-lg-2 float-right action-col">
+                <div class="btn-group" role="group" aria-label="Basic example">
+                  {% if todo.completed %}
+                    <div></div>
+                  {% else %}
+                    <form action="/complete/{{ todo.id }}/">
+                      <button type="submit" class="btn btn-outline-success todo-action">Complete</button>
+                    </form>
+                  {% endif %}   
+                  <form action="/delete/{{ todo.id }}/">
+                    <button type="submit" class="btn btn-outline-danger todo-action">Delete</button>
+                  </form>  
+                </div>
               </div>
             </div>
           </div>

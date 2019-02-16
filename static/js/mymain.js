@@ -26,24 +26,3 @@ paths.forEach(el => {
     loop: true
   });
 });
-
-// progressbar.js@1.0.0 version is used
-// Docs: http://progressbarjs.readthedocs.org/en/1.0.0/
-
-var bar = new ProgressBar.Line(pbar, {
-  strokeWidth: 1,
-  easing: 'easeInOutSine',
-  duration: 1400,
-  color: '#FFEA82',
-  trailColor: '#eee',
-  trailWidth: 1,
-  svgStyle: {width: '100%', height: '100%'}
-});
-
-$(function(){
-  bar.set(data.green_from);
-  bar.animate((data.green_to), 
-  { 
-    duration: 1000,
-  }) 
-});

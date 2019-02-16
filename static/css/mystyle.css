@@ -8,3 +8,20 @@ form { display: inline; }
     width: 100%;
     height: 15px;
 }
+
+.todo-title {
+    white-space:normal !important;
+    word-wrap: break-word; 
+}
+
+.action-col {
+    display:flex;
+    align-items:center; /* vertically aligned! */
+    justify-content: center;
+}
+  
+.action-title {
+    display:flex;
+    align-items:center; /* vertically aligned! */
+    justify-content: center;
+}
