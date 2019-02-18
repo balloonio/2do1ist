@@ -21,6 +21,7 @@ from todolist import views
 urlpatterns = [
     path('', views.todo_list, name='todo_home'),
     path('add/', views.add),
+    path('add-ajax/', views.add_ajax),
     path('complete/<int:todo_id>/', views.complete),
     path('delete/<int:todo_id>/', views.delete)
 ]

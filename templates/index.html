@@ -23,6 +23,9 @@
         </div> 
       </div>
     </div>
+
+    <input type="text" name="todoname-ajax" class="form-control my-2" placeholder="Add a todo and hit Enter" aria-label="a todo task" aria-describedby="basic-addon1">
+
                   
     <div id="pbar"></div>
  
@@ -96,8 +99,8 @@
       {% endfor %}
     </div>
 
-    <!-- Button for Add todo -->
-    <button type="button" class="btn btn-primary my-2 todo-action" data-toggle="modal" data-target="#modal-add">Add</button>
+    <!-- Button for Add todo - this has been replaced by AJAX todoname add function, therefore hidden for education purpose only -->
+    <button hidden type="button" class="btn btn-primary my-2 todo-action" data-toggle="modal" data-target="#modal-add">Add</button>
     <!-- Modal -->
     <div class="modal fade" id="modal-add" tabindex="-1" role="dialog" aria-labelledby="addTodoModalLabel" aria-hidden="true">
         <!-- HTML form for modal-add -->
@@ -117,16 +120,93 @@
                                 <span class="input-group-text" id="basic-addon1">todo</span>
                             </div>
                             <input type="text" name="todoname" class="form-control" placeholder="what to do" aria-label="what to do" aria-describedby="basic-addon1">
+
+
+
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Add</button>
+                        <button type="submit" class="btn btn-primary add-btn">Add</button>
                     </div>
                 </div>
             </div>
         </form>
     </div>
   </div>
+                              <script>
+                              function sendAjax(e)
+                              {
+                                if( e.key != 'Enter')
+                                {
+                                  return;
+                                }
+
+                                let xhr = new XMLHttpRequest();
+                                xhr.onload = function (){
+                                  console.log("Ajax response received!" + xhr.responseText );
+                                  let jsonResponse = JSON.parse(xhr.responseText);
+
+                                  let template = `
+                                  <li class="list-group-item">
+                                    <div class="container">
+                                      <div class="row">
+                                        <div class="col-4 col-sm-6 col-md-8 col-lg-10">
+                                          <p class="todo-title">
+
+                                            ${jsonResponse.created_title}
+
+                                          </p>           
+                                        </div>
+
+                                        <div class="col-8 col-sm-6 col-md-4 col-lg-2 float-right action-col">
+                                          <div class="btn-group" role="group" aria-label="Basic example">
+
+                                            <form action="/complete/${jsonResponse.created_id}/">
+                                              <button type="submit" class="btn btn-outline-success todo-action">Complete</button>
+                                            </form>
+                                            <form action="/delete/${jsonResponse.created_id}/">
+                                              <button type="submit" class="btn btn-outline-danger todo-action">Delete</button>
+                                            </form>  
+
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </li>      
+                                  `;
+
+                                  /**
+                                  * @param {String} HTML representing a single element
+                                  * @return {Element}
+                                  */
+                                  function htmlToElement(html) {
+                                      var template = document.createElement('template');
+                                      html = html.trim(); // Never return a text node of whitespace as the result
+                                      template.innerHTML = html;
+                                      return template.content.firstChild;
+                                  }
+
+                                  let new_todo_list_item = htmlToElement(template);
+                                  let header_list_item = document.getElementsByClassName('list-group')[0].firstElementChild;
+                                  header_list_item.parentNode.insertBefore(new_todo_list_item, header_list_item.nextSibling);
+                                  bar.animate((jsonResponse.progress_to), 
+                                    { 
+                                      duration: 1000,
+                                    });
+                                };
+                                xhr.open('POST','/add-ajax/', true );
+                                var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+                                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                                xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                                todoTitle = encodeURIComponent(document.getElementsByName('todoname-ajax')[0].value);
+                                xhr.send("todoname="+todoTitle);
+                                document.getElementsByName('todoname-ajax')[0].value = "";
+                              };
+
+                              document.getElementsByName('todoname-ajax')[0].addEventListener('keydown', sendAjax)
+
+                            </script>
 {% else %}
   <!-- THIS SHOULD NEVER BE REACHED BECAUSE OF SERVER SIDE REDIRECT! -->
   <p>You are not logged in</p>

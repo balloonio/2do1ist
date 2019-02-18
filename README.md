@@ -14,6 +14,7 @@ This app covers the following topics and practice:
 - How to use **Bootstrap grid system**
 - How to **animate svg logo** with anime.js
 - How to **animate progress bar** with progressbar.js
+- How to send an **AJAX** request and read the response
 
 Table of Content
 
@@ -27,6 +28,7 @@ Table of Content
 - [HTTP Form, GET and POST](#http-form-get-and-post)
 - [Add/Complete/Delete a Todo](#addcompletedelete-a-todo)
 - [Animate SVG Logo](#animate-svg-logo)
+- [AJAX Request](#ajax-request)
 - [About Deployment](#about-deployment)
 - [Reference](#reference)
 
@@ -41,7 +43,7 @@ python3 -m venv myvenv
 Activate it:
 
 ```
-source /myvenv/bin/activate
+source myvenv/bin/activate
 ```
 
 Install Django:
@@ -463,6 +465,42 @@ paths.forEach(el => {
 });
 ```
 
+## AJAX Request
+
+We have been redirecting users to other url for each todolist action, which is okay but not perfect. Users don't want to see their page being refreshed again and again. That's where AJAX comes into the picture. Let's rework our todolist page to have a textbox inside the list-group. Whenever users type inside the textbox and hit enter, an AJAX version Add action is sent to backend.
+
+To send an AJAX request:
+
+```javascript
+let xhr = new XMLHttpRequest();
+xhr.onload = function (){
+  // this is the ajax callback function
+  console.log("Ajax response received!" + xhr.responseText );
+  let jsonResponse = JSON.parse(xhr.responseText);
+};
+xhr.open('POST','/add-ajax/', true );
+var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+xhr.setRequestHeader("X-CSRFToken", csrftoken);
+xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+todoTitle = encodeURIComponent(document.getElementsByName('todoname-ajax')[0].value);
+xhr.send("todoname="+todoTitle);
+```
+
+> `encodeURIComponent()` is required to encode special characters. In addition, it encodes the following characters: `, / ? : @ & = + $ #`
+
+To process an AJAX request on server side and return a JSON response:
+
+```python
+from django.http import JsonResponse
+
+def add_ajax(request):
+    todoname = request.POST.get('todoname')
+    new_todo = Todo.objects.create(title=todoname, user_id=request.user.id)
+    data = { 'created_title' : new_todo.title, 'created_id': new_todo.id }
+    return JsonResponse(data)
+```
+
 ## About Deployment
 
 Add the deployment domain to ALLOWED_HOSTS setting:
@@ -485,3 +523,6 @@ python3 manage.py collectstatic
 [anime.js](https://animejs.com/)  
 [How SVG Line Animation Works](https://css-tricks.com/svg-line-animation-works/)  
 [Metamorphosis: morphing SVGs](https://hackernoon.com/metamorphosis-morphing-svgs-378cf4f3aa58)  
+[How to Work With AJAX Request With Django](https://simpleisbetterthancomplex.com/tutorial/2016/08/29/how-to-work-with-ajax-request-with-django.html)  
+[AJAX - Send a Request To a Server](https://www.w3schools.com/js/js_ajax_http_send.asp)  
+[Cross Site Request Forgery protection - Ajax](https://docs.djangoproject.com/en/dev/ref/csrf/#ajax)  
