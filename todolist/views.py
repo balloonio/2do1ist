@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 from todolist.models import Todo
 
@@ -44,6 +44,18 @@ def add(request):
     todoname = request.POST.get('todoname')
     new_todo = Todo.objects.create(title=todoname, user_id=request.user.id)
     return HttpResponseRedirect('/')
+
+def add_ajax(request):
+    request.session['LAST_OP'] = 'ADD'
+    todoname = request.POST.get('todoname')
+    new_todo = Todo.objects.create(title=todoname, user_id=request.user.id)
+
+    todos = Todo.objects.filter(user_id=request.user.id)
+    completed = sum( t.completed for t in todos )
+    green_from, green_to = get_progress_bar_values( 'ADD', completed, len(todos) )
+
+    data = { 'created_title' : new_todo.title, 'created_id': new_todo.id, 'progress_from': green_from, 'progress_to': green_to }
+    return JsonResponse(data)
 
 def complete(request, todo_id):
     request.session['LAST_OP'] = 'COM'
