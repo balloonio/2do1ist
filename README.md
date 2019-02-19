@@ -487,7 +487,7 @@ todoTitle = encodeURIComponent(document.getElementsByName('todoname-ajax')[0].va
 xhr.send("todoname="+todoTitle);
 ```
 
-> `encodeURIComponent()` is required to encode special characters. In addition, it encodes the following characters: `, / ? : @ & = + $ #`
+> ⚠️ `encodeURIComponent()` is required to encode special characters. In addition, it encodes the following characters: `, / ? : @ & = + $ #`. Django requires csrf token to be sent along with POST request; otherwise, Django server will response 403 Forbidden. ⚠️
 
 To process an AJAX request on server side and return a JSON response:
 
